@@ -1,0 +1,641 @@
+[
+    {
+        "id": "technicalFeasibility",
+        "name": "technicalFeasibility",
+        "label": "Technical Feasibility",
+
+        "innerTabs": [
+            {
+                "id": "assumption_question_SCCHGP",
+                "name": "assumption_question_SCCHGP",
+                "type": "tab",
+                "label": "Assumptions/Questions for Stacked Commingle CHGP assessment Work Flow",
+                "content": [
+                    {
+                        "id": "assump_cased_hole_completion",
+                        "name": "assump_cased_hole_completion",
+                        "label": "Assumes a cased hole completion",
+                        "type":"statement"
+                    },
+                    {
+                        "id": "assump_sand_control_type",
+                        "name": "assump_sand_control_type",
+                        "label": "Assumes sand control type is already determined (HRWP vs. CHFP) in the Single CHGP work flow",
+                        "type":"statement"
+                    },
+                    {
+                        "id": "assump_producible_zone",
+                        "name": "assump_producible_zone",
+                        "label": "There is more than 1 producible zone in the wellbore",
+                        "type":"statement"
+                    }
+                ]
+            },
+            {
+                "id": "commingle_differential_pressure",
+                "name": "commingle_differential_pressure",
+                "type": "tab",
+                "label": "Regulatory Requirement for Commingled Differential Pressure",
+                "tooltip": "Justification can also be made to BOEM to group independent sand lobes into a reservoir package when an initial field development plan is proposed (i.e. M4/M6 sands or M1/M2 sands at Mars).  This will allow for completing these sand packages without commingling approval during the production life cycle.  Also, when reservoirs are shown to be in pressure communication (i.e. upper and lower yellow sands at Mars) commingling approval will be granted beyond the 200 Δpsi limit.   Attached below are some Mars examples of these commingle completion types.",
+                "content": [
+                    {
+                        "name": "IsDifferentialPressureBetweenZoneGreaterThan200psi",
+                        "id": "IsDifferentialPressureBetweenZoneGreaterThan200psi",
+                        "label": "Is the differential pressure between the 2 zones greater than 200psi?",
+                        "type": "question",
+                        "options": [
+                            {
+                                "name": "IsDifferentialPressureBetweenZoneGreaterThan200psi",
+                                "label": "No",
+                                "value": "No"
+                            },
+                            {
+                                "name": "IsDifferentialPressureBetweenZoneGreaterThan200psi",
+                                "label": "Yes",
+                                "value": "Yes"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "IsDifferentialPressureGreaterThan200_result_warning",
+                        "name": "IsDifferentialPressureGreaterThan200_result_warning",
+                        "type": "resultbox",
+                        "label": "Differential pressure suitable for stacked commingle",
+                        "enableColor": "pass",
+                        "disableColor": "incomplete",
+                        "condition": "{IsDifferentialPressureBetweenZoneGreaterThan200psi} == 'No'"
+                    },
+                    {
+                        "name": "WillPressureEqualizeAllowingCommingledFlow",
+                        "id": "WillPressureEqualizeAllowingCommingledFlow",
+                        "label": "If one zone is produced for a brief period time (<6 months), will the pressure equalize, allowing for commingled flow?",
+                        "type": "question",
+                        "tooltip": "NOTE: Otherwise, the regulator needs to be engaged on a variance to the 200 psi requirement; this is especially important if reserves could otherwise not be economically produced.",
+                        "condition": "{IsDifferentialPressureBetweenZoneGreaterThan200psi} == 'Yes'",
+                        "options": [
+                            {
+                                "name": "WillPressureEqualizeAllowingCommingledFlow",
+                                "label": "No",
+                                "value": "No"
+                            },
+                            {
+                                "name": "WillPressureEqualizeAllowingCommingledFlow",
+                                "label": "Yes",
+                                "value": "Yes"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "IsPressureEqualize_result_warning",
+                        "name": "IsPressureEqualize_result_warning",
+                        "type": "resultbox",
+                        "label": "Smart Well would be required to commingle zones. NOTE: Work through the SMART Workflow",
+                        "enableColor": "warning",
+                        "disableColor": "incomplete",
+                        "condition": "{WillPressureEqualizeAllowingCommingledFlow} == 'Yes'"
+                    },
+                    {
+                        "id": "IsPressureEqualize_result_warning_2",
+                        "name": "IsPressureEqualize_result_warning_2",
+                        "type": "resultbox",
+                        "label": "A stacked selective well could be installed and a S/L intervention executed several months after completion to commingle well. Note that in most cases an intervention on a subsea well out weighs the incremental cost for a smart well.",
+                        "enableColor": "warning",
+                        "disableColor": "incomplete",
+                        "condition": "{WillPressureEqualizeAllowingCommingledFlow} == 'No'"
+                    },
+                    {
+                        "id": "commingle_differential_pressure-comment",
+                        "name": "commingle_differential_pressure-comment",
+                        "type": "commentbox"
+                    }
+                ]
+            },
+            {
+                "id": "regulatory_screening",
+                "name": "regulatory_screening",
+                "type": "tab",
+                "label": "Regulatory Screening Requirements for Commingling",
+                "tooltip": "These requirements are applicable for all commingling concepts.",
+                "content": [
+                    {
+                        "id": "IsFormationFluidCompatible",
+                        "name": "IsFormationFluidCompatible",
+                        "type": "question",
+                        "label": "Are the formation fluids compatible?",
+                        "tooltip": "Note: Per Shell Regulatory, BSEE requires a demonstration of fluid compatibility in order to approve a commingle permit. An approved commingle permit has been previously required prior to receive an approved completions APM. BSEE has accepted the following as proof of fluid compatibility. Compatibility of  both hydrocarbons and produced water is required. -Analog data -Geochemical finger printing demonstrating similar fluid properties i.e. similar densities and viscosities -Produced water compatibility testing (if samples exist) -Hydrocarbon compatibility testing (if samples exist) -Scale mitigations to be used if required during commingling -If chemical compatibility is an issue, provide details on compatibility control measure i.e. chemical injection through deep CIM. Evaluate if fluids are suitable for small radius/non-asphaltene scaling",
+                        "options": [
+                            {
+                                "name": "IsFormationFluidCompatible",
+                                "label": "No",
+                                "value": "No"
+                            },
+                            {
+                                "name": "IsFormationFluidCompatible",
+                                "label": "Yes",
+                                "value": "Yes"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "IsFormationFluidCompatible_result",
+                        "name": "IsFormationFluidCompatible_result",
+                        "type": "resultbox",
+                        "label": "Stop",
+                        "condition": "{IsFormationFluidCompatible} == 'No'",
+                        "enableColor": "fail",
+                        "disableColor": "incomplete"
+                    },
+                    {
+                        "id": "IsFormationFluidCompatible_result2",
+                        "name": "IsFormationFluidCompatible_result2",
+                        "type": "resultbox",
+                        "label": "1st regulatory requirement met.",
+                        "condition": "{IsFormationFluidCompatible} == 'Yes'",
+                        "enableColor": "pass",
+                        "disableColor": "incomplete"
+                    },
+                    {
+                        "id": "zoneSelection",
+                        "name": "zoneSelection",
+                        "type": "question",
+                        "label": "EUR of each zone of a stack commingle well has equal or greater EUR of each zone of single zone single well scenarios? Utilize \"base case\" forecasts for modelling",
+                        "options": [
+                            {
+                                "name": "zoneSelection",
+                                "label": "No",
+                                "value": "No"
+                            },
+                            {
+                                "name": "zoneSelection",
+                                "label": "Yes",
+                                "value": "Yes"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "zoneSelection_result",
+                        "name": "zoneSelection_result",
+                        "type": "resultbox",
+                        "label": "2nd regulatory requirement met.",
+                        "enableColor": "pass",
+                        "disableColor": "incomplete",
+                        "condition": "{zoneSelection} == 'Yes'"
+                    },
+                    {
+                        "id": "zoneObtainedEconomically",
+                        "name": "zoneObtainedEconomically",
+                        "type": "question",
+                        "label": "Is there a zone that can be obtained economically with a stack commingle well that wouldn't be obtained otherwise (uneconomical for a standalone well, no other planned penetrations)?",
+                        "tooltip": "Note: If the total EUR of a well is increased, but the zonal EUR of the primary zone is impacted by adding an incremental zone that otherwise would not be obtained may be a justification for commingling. Further engagement with BSEE is likely to be required.",
+                        "condition": "{zoneSelection} == 'No'",
+                        "options": [
+                            {
+                                "name": "zoneObtainedEconomically",
+                                "label": "No",
+                                "value": "No"
+                            },
+                            {
+                                "name": "zoneObtainedEconomically",
+                                "label": "Yes",
+                                "value": "Yes"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "zoneObtainedEconomically_result",
+                        "name": "zoneObtainedEconomically_result",
+                        "type": "resultbox",
+                        "label": "2nd regulatory requirement met.",
+                        "enableColor": "warning",
+                        "disableColor": "incomplete",
+                        "condition": "{zoneObtainedEconomically} == 'Yes'"
+                    },
+                    {
+                        "id": "zoneObtainedEconomically_result_2",
+                        "name": "zoneObtainedEconomically_result_2",
+                        "type": "resultbox",
+                        "label": "Stop",
+                        "enableColor": "fail",
+                        "disableColor": "incomplete",
+                        "condition": "{zoneObtainedEconomically} == 'No'"
+                    },
+                    {
+                        "id": "TotalEurAssociatedWithStackCommingle",
+                        "name": "TotalEurAssociatedWithStackCommingle",
+                        "type": "question",
+                        "label": "The total EUR associated with the stack commingle well concept will be determined towards the end of the concept assessment process as more detailed modelling would be required. Is commingling justification \"strong\" or \"weak\"?  Review \"story\" (proposal and/or justification) for commingling with Shell Regulatory",
+                        "tooltip": "<a rel='noreferrer' href='https://eu001-sp.shell.com/:f:/r/sites/SPO000507/Shared%20Documents/Reference%20Documents/Reference%20(01)?csf=1&web=1&e=zRVbuu' target='_blank'>Reference 1</a> (REFERENCES tab) contains summary on commingling in the GoM, and examples of previous commingle justifications",
+                        "options": [
+                            {
+                                "name": "TotalEurAssociatedWithStackCommingle",
+                                "label": "New or Weak Justification",
+                                "value": "New or Weak Justification"
+                            },
+                            {
+                                "name": "TotalEurAssociatedWithStackCommingle",
+                                "label": "Strong & Routine Justification",
+                                "value": "Strong & Routine Justification"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "TotalEurAssociatedWithStackCommingle_result",
+                        "name": "TotalEurAssociatedWithStackCommingle_result",
+                        "type": "resultbox",
+                        "label": "Consider early engagement with BSEE",
+                        "enableColor": "warning",
+                        "disableColor": "incomplete",
+                        "condition": "{TotalEurAssociatedWithStackCommingle} == 'New or Weak Justification'"
+                    },
+                    {
+                        "id": "TotalEurAssociatedWithStackCommingle_result2",
+                        "name": "TotalEurAssociatedWithStackCommingle_result2",
+                        "type": "resultbox",
+                        "label": "Proceed with standard BSEE engagement timelines/strategy",
+                        "enableColor": "pass",
+                        "disableColor": "incomplete",
+                        "condition": "{TotalEurAssociatedWithStackCommingle} == 'Strong & Routine Justification'"
+                    },
+                    {
+                        "id": "regulatory_screening-comment",
+                        "name": "regulatory_screening-comment",
+                        "type": "commentbox"
+                    }
+                ]
+            },
+            {
+                "id": "lowerCompletionInstallationScreening",
+                "name": "lowerCompletionInstallationScreening",
+                "type": "tab",
+                "label": "Lower Completion Installation Screening",
+                "tooltip": "If the distance between top of lower zone and bottom of upper zone >500 ft consider installation of an isolation assembly between zones.",
+                "content": [
+                    {
+                        "id": "IsDistanceBetweenTopandBottomLessThan100ft",
+                        "name": "IsDistanceBetweenTopandBottomLessThan100ft",
+                        "type": "question",
+                        "label": "Is the distance between top of lower zone and bottom of upper zone <100 ft?",
+                        "dwfsUrl": "http://wellsoffice.shell.com/wo-dwfs/dwfs/WellFunction/Perforating",
+                        "dwfsTab": "Well Function",
+                        "options": [
+                            {
+                                "name": "IsDistanceBetweenTopandBottomLessThan100ft",
+                                "label": "No",
+                                "value": "No"
+                            },
+                            {
+                                "name": "IsDistanceBetweenTopandBottomLessThan100ft",
+                                "label": "Yes",
+                                "value": "Yes"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "IsDistanceBetweenTopandBottomLessThan100ft_result",
+                        "name": "IsDistanceBetweenTopandBottomLessThan100ft_result",
+                        "type": "resultbox",
+                        "label": "Pass - continue technical screening",
+                        "condition": "{IsDistanceBetweenTopandBottomLessThan100ft} == 'No'",
+                        "enableColor": "pass",
+                        "disableColor": "incomplete"
+                    },
+                    {
+                        "id": "CanGravelPackBlankVolumeBeReduced",
+                        "name": "CanGravelPackBlankVolumeBeReduced",
+                        "type": "question",
+                        "label": "Can the gravel pack blank volume be reduced to install a \"short hook up\"?",
+                        "condition": "{IsDistanceBetweenTopandBottomLessThan100ft} == 'Yes'",
+                        "theme": "warning",
+                        "options": [
+                            {
+                                "name": "CanGravelPackBlankVolumeBeReduced",
+                                "label": "Yes",
+                                "value": "Yes"
+                            },
+                            {
+                                "name": "CanGravelPackBlankVolumeBeReduced",
+                                "label": "No",
+                                "value": "No"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "CanGravelPackBlankVolumeBeReduced_result",
+                        "name": "CanGravelPackBlankVolumeBeReduced_result",
+                        "type": "resultbox",
+                        "label": "Evaluate technical risks associated with performing a short hookup i.e. less reserve to fill void space. Pass - continue technical screening",
+                        "condition": "{CanGravelPackBlankVolumeBeReduced} == 'Yes'",
+                        "enableColor": "pass",
+                        "disableColor": "incomplete"
+                    },
+                    {
+                        "id": "CanPerfIntervalBeShorten",
+                        "name": "CanPerfIntervalBeShorten",
+                        "type": "question",
+                        "label": "Can the perf interval be shorten to accommodate completion equipment?",
+                        "condition": "{CanGravelPackBlankVolumeBeReduced} == 'No'",
+                        "theme": "warning",
+                        "options": [
+                            {
+                                "name": "CanPerfIntervalBeShorten",
+                                "label": "Yes",
+                                "value": "Yes"
+                            },
+                            {
+                                "name": "CanPerfIntervalBeShorten",
+                                "label": "No",
+                                "value": "No"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "CanPerfIntervalBeShorten_result",
+                        "name": "CanPerfIntervalBeShorten_result",
+                        "type": "resultbox",
+                        "label": "Update economics to include reduce perf interval and evaluate accordingly. Pass - continue technical screening",
+                        "condition": "{CanPerfIntervalBeShorten} == 'Yes'",
+                        "enableColor": "pass",
+                        "disableColor": "incomplete"
+                    },
+                    {
+                        "id": "CanGravelPackBlankVolumeBeReduced_result_right",
+                        "name": "CanGravelPackBlankVolumeBeReduced_result_right",
+                        "type": "resultbox",
+                        "label": "Stop",
+                        "condition": "{CanPerfIntervalBeShorten} == 'No'",
+                        "enableColor": "fail",
+                        "disableColor": "incomplete"
+                    },
+                    {
+                        "id": "lowerCompletionInstallationScreening-comment",
+                        "name": "lowerCompletionInstallationScreening-comment",
+                        "type": "commentbox"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "label": "Value Economic Screening",
+        "name": "valueEconomicScreening",
+        "id": "valueEconomicScreening",
+        "innerTabs": [
+            {
+                "id": "costScreening",
+                "name": "costScreening",
+                "type": "tab",
+                "label": "Cost",
+                "content": [
+                    {
+                        "id": "IncrementalCostForStackedWell",
+                        "name": "IncrementalCostForStackedWell",
+                        "label": "Determine incremental cost for a stacked well over a single well. $10 mln SS $3.5 mln DVA",
+                        "type": "statement"
+                    },
+                    {
+                        "id": "CanCommingledWellReduceWellCount",
+                        "name": "CanCommingledWellReduceWellCount",
+                        "label": "Can a commingled well reduce well count?",
+                        "tooltip": " Consider the following: - Reference CET Multi-Zone Cost Screening Tool <a rel='noreferrer' href='https://eu001-sp.shell.com/:f:/r/sites/SPO000507/Shared%20Documents/Reference%20Documents/Reference%20(08)?csf=1&web=1&e=klH4du' target='_blank'>(#8 in REFERENCES tab)</a> Carefully consider development impact of extra or removed wells",
+                        "type": "question",
+                        "options": [
+                            {
+                                "name": "CanCommingledWellReduceWellCount",
+                                "label": "No",
+                                "value": "No"
+                            },
+                            {
+                                "name": "CanCommingledWellReduceWellCount",
+                                "label": "Yes",
+                                "value": "Yes"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "IncrementalCostForStackedWell_result_left",
+                        "name": "IncrementalCostForStackedWell_result_left",
+                        "type": "resultbox",
+                        "label": "No additional cost savings to capture in NPV calcs",
+                        "enableColor": "fail",
+                        "disableColor": "incomplete",
+                        "condition": "{CanCommingledWellReduceWellCount} == 'No'"
+                    },
+                    {
+                        "id": "IncrementalCostForStackedWell_result_right",
+                        "name": "IncrementalCostForStackedWell_result_right",
+                        "type": "resultbox",
+                        "label": "Include Savings in NPV Calcs $75 mln SS $50 mln TLP",
+                        "enableColor": "pass",
+                        "disableColor": "incomplete",
+                        "condition": "{CanCommingledWellReduceWellCount} == 'Yes'"
+                    },
+                    {
+                        "id": "costScreening-comment",
+                        "name": "costScreening-comment",
+                        "type": "commentbox"
+                    }
+                ]
+            },
+            {
+                "id": "zonalEurDifferencesScreening",
+                "name": "zonalEurDifferencesScreening",
+                "label": "Zonal EUR Differences",
+                "type": "tab",
+                "content": [
+                    {
+                        "id": "IsEUREachZoneSignificantlyDifferent",
+                        "name": "IsEUREachZoneSignificantlyDifferent",
+                        "label": "Are the EUR's of each  zone significantly different",
+                        "type": "question",
+                        "options": [
+                            {
+                                "name": "IsEUREachZoneSignificantlyDifferent",
+                                "label": "No",
+                                "value": "No"
+                            },
+                            {
+                                "name": "IsEUREachZoneSignificantlyDifferent",
+                                "label": "Yes",
+                                "value": "Yes"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "IsEUREachZoneSignificantlyDifferent_result",
+                        "name": "IsEUREachZoneSignificantlyDifferent_result",
+                        "type": "resultbox",
+                        "label": "Pass - continue value/economic screening",
+                        "enableColor": "pass",
+                        "disableColor": "incomplete",
+                        "condition": "{IsEUREachZoneSignificantlyDifferent} == 'No'"
+                    },
+                    {
+                        "id": "WhichZoneHasHigherEUR",
+                        "name": "WhichZoneHasHigherEUR",
+                        "label": "Which zone has significantly higher EUR?",
+                        "type": "question",
+                        "options": [
+                            {
+                                "name": "WhichZoneHasHigherEUR",
+                                "label": "Lower Zone",
+                                "value": "Lower Zone"
+                            },
+                            {
+                                "name": "WhichZoneHasHigherEUR",
+                                "label": "Upper Zone",
+                                "value": "Upper Zone"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "WhichZoneHasHigherEUR_result_left",
+                        "name": "WhichZoneHasHigherEUR_result_left",
+                        "type": "resultbox",
+                        "label": "A plug could be installed to isolate the lower zone. Note that in most cases an intervention on a subsea well out weighs the incremental cost for a smart well.",
+                        "enableColor": "warning",
+                        "disableColor": "incomplete",
+                        "condition": "{WhichZoneHasHigherEUR} == 'Lower Zone'"
+                    },
+                    {
+                        "id": "WhichZoneHasHigherEUR_result_right",
+                        "name": "WhichZoneHasHigherEUR_result_right",
+                        "type": "resultbox",
+                        "label": "A selective well could be installed and a S/L intervention executed to close the SSD. However, the ability to successfully close the SSD will be less likely than opening an SSD for the first time. Note that in most cases an intervention on a subsea well out weighs the incremental cost for a smart well.",
+                        "enableColor": "pass",
+                        "disableColor": "incomplete",
+                        "condition": "{WhichZoneHasHigherEUR} == 'Upper Zone'"
+                    },
+                    {
+                        "id": "zonalEurDifferencesScreening-comment",
+                        "name": "zonalEurDifferencesScreening-comment",
+                        "type": "commentbox"
+                    }
+                ]
+            },
+            {
+                "id": "acceleratedProductionEoflScreening",
+                "name": "acceleratedProductionEoflScreening",
+                "type": "tab",
+                "label": "Accelerated Production or EOFL",
+                "content": [
+                    {
+                        "id": "IsThereProductionAccelerationBenefit",
+                        "name": "IsThereProductionAccelerationBenefit",
+                        "label": "Is there a production acceleration benefit or end of field life benefit of installing a second zone (or third zone)?",
+                        "tooltip": "Some examples include: -Accelerating production from an uphole zone may increase EUR from the zone if current FDP production forecasts exceed EOFL estimates. -Accelerating production of a waterflooded zone via a commingled well could increase EUR while pressure support is greatest if the alternative production plan is to produce the uphole zone from a current injector wellbore in the future.",
+                        "type": "question",
+                        "options": [
+                            {
+                                "name": "IsThereProductionAccelerationBenefit",
+                                "label": "No",
+                                "value": "No"
+                            },
+                            {
+                                "name": "IsThereProductionAccelerationBenefit",
+                                "label": "Yes",
+                                "value": "Yes"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "IsThereProductionAccelerationBenefit_result_left",
+                        "name": "IsThereProductionAccelerationBenefit_result_left",
+                        "type": "resultbox",
+                        "label": "Continue value/economic screening for applicable commingled benefits.",
+                        "enableColor": "warning",
+                        "disableColor": "incomplete",
+                        "condition": "{IsThereProductionAccelerationBenefit} == 'No'"
+                    },
+                    {
+                        "id": "IsThereProductionAccelerationBenefit_result_right",
+                        "name": "IsThereProductionAccelerationBenefit_result_right",
+                        "type": "resultbox",
+                        "label": "Pass - continue value/economic screening",
+                        "enableColor": "pass",
+                        "disableColor": "incomplete",
+                        "condition": "{IsThereProductionAccelerationBenefit} == 'Yes'"
+                    },
+                    {
+                        "id": "acceleratedProductionEoflScreening-comment",
+                        "name": "acceleratedProductionEoflScreening-comment",
+                        "type": "commentbox"
+                    }
+                ]
+            },
+            {
+                "id": "productionReservoirModelling",
+                "name": "productionReservoirModelling",
+                "type": "tab",
+                "label": "Production & Reservoir Modelling",
+                "content": [
+                    {
+                        "id": "determineCostOfPotentialConcepts",
+                        "name": "determineCostOfPotentialConcepts",
+                        "label": "Determine costs of potential concepts (single zone, conventional commingle well)",
+                        "type": "statement"
+                    },
+                    {
+                        "id": "generateProductionForcasts",
+                        "name": "generateProductionForcasts",
+                        "label": "Generate production forecasts of single zone and conventional stacked commingle well",
+                        "type": "statement"
+                    },
+                    {
+                        "id": "constructDecisionTreeOfConcept",
+                        "name": "constructDecisionTreeOfConcept",
+                        "label": "Construct decision tree of concept options with risked execution, VOI events, etc...",
+                        "tooltip": "-Reference the CET Smart Well Screening Tool for GAP modelling structure and smart well modelling best practices <a rel='noreferrer' href='https://eu001-sp.shell.com/:f:/r/sites/SPO000507/Shared%20Documents/Reference%20Documents/Reference%20(09)?csf=1&web=1&e=FfhNIy' target='_blank'>(#9 in REFERENCES tab)</a>",
+                        "type": "statement"
+                    },
+                    {
+                        "id": "generateFinalVirNpv",
+                        "name": "generateFinalVirNpv",
+                        "label": "Generate final VIR, NPV, etc.. of conceptual scenarios",
+                        "type": "statement"
+                    },
+                    {
+                        "id": "IsThereSignificantBenefitOfCommingleWell",
+                        "name": "IsThereSignificantBenefitOfCommingleWell",
+                        "label": "Is there a significant cost, rate, volume, or risk mitigation benefit of a commingle well?",
+                        "type": "question",
+                        "options": [
+                            {
+                                "name": "IsThereSignificantBenefitOfCommingleWell",
+                                "label": "Yes",
+                                "value": "Yes"
+                            },
+                            {
+                                "name": "IsThereSignificantBenefitOfCommingleWell",
+                                "label": "No",
+                                "value": "No"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "IsThereSignificantBenefitOfCommingleWell_result_left",
+                        "name": "IsThereSignificantBenefitOfCommingleWell_result_left",
+                        "type": "resultbox",
+                        "label": "Proceed forward with commingle Well Concept Selection recommendation.",
+                        "enableColor": "pass",
+                        "disableColor": "incomplete",
+                        "condition": "{IsThereSignificantBenefitOfCommingleWell} == 'Yes'"
+                    },
+                    {
+                        "id": "IsThereSignificantBenefitOfCommingleWell_result_right",
+                        "name": "IsThereSignificantBenefitOfCommingleWell_result_right",
+                        "type": "resultbox",
+                        "label": "Stop",
+                        "enableColor": "fail",
+                        "disableColor": "incomplete",
+                        "condition": "{IsThereSignificantBenefitOfCommingleWell} == 'No'"
+                    },
+                    {
+                        "id": "productionReservoirModelling-comment",
+                        "name": "productionReservoirModelling-comment",
+                        "type": "commentbox"
+                    }
+                ]
+            }
+        ]
+    }
+]
