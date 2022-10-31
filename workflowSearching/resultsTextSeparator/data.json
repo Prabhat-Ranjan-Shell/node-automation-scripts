@@ -1,0 +1,620 @@
+[
+    {
+        "id": "technicalFeasibility",
+        "name": "technicalFeasibility",
+        "label": "Technical Feasibility",
+
+        "innerTabs": [
+            {
+                "id": "assumption_question_SSCHGP",
+                "name": "assumption_question_SSCHGP",
+                "type": "tab",
+                "label": "Assumptions/Questions for Stacked  Selective CHGP assessment Work Flow",
+                "content": [
+                    {
+                        "id": "assump_stacked_commingled_completion",
+                        "name": "assump_stacked_commingled_completion",
+                        "label": "Assumes a stacked commingled completion was not feasible or preferred",
+                        "type":"statement"
+                    },
+                    {
+                        "id": "assump_cased_hole_completion",
+                        "name": "assump_cased_hole_completion",
+                        "label": "Assumes a cased hole completion",
+                        "type":"statement"
+                    },
+                    {
+                        "id": "assump_sand_control_type",
+                        "name": "assump_sand_control_type",
+                        "label": "Assumes sand control type is already determined (HRWP vs. CHFP) in the Single CHGP work flow",
+                        "type":"statement"
+                    },
+                    {
+                        "id": "assump_producible_zone",
+                        "name": "assump_producible_zone",
+                        "label": "There is more than 1 producible zone in the wellbore",
+                        "type":"statement"
+                    }
+                ]
+            },
+            {
+                "id": "lower_completion_installtion_screening",
+                "name": "lower_completion_installtion_screening",
+                "type": "tab",
+                "label": "Lower Completion Installation Screening",
+                "content": [
+                    {
+                        "name": "DoZonesHaveSameKillWeight",
+                        "id": "DoZonesHaveSameKillWeight",
+                        "label": "Do the zones have the same kill weight gradient +/-.5 ppg with regards to RKB?",
+                        "type": "question",
+                        "dwfsUrl": "http://wellsoffice.shell.com/wo-dwfs/dwfs/PPFGBoreholeStability/BS",
+                        "dwfsTab": "PPFG",
+                        "options": [
+                            {
+                                "name": "DoZonesHaveSameKillWeight",
+                                "label": "No",
+                                "value": "No"
+                            },
+                            {
+                                "name": "DoZonesHaveSameKillWeight",
+                                "label": "Yes",
+                                "value": "Yes"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "SameKillWeight",
+                        "name": "SameKillWeight",
+                        "type": "resultbox",
+                        "label": "Pass - continue technical screening",
+                        "enableColor": "pass",
+                        "disableColor": "incomplete",
+                        "condition": "{DoZonesHaveSameKillWeight} == 'Yes'"
+                    },
+                    {
+                        "name": "IsUpperZonePressureHigher",
+                        "id": "IsUpperZonePressureHigher",
+                        "label": "Is the upper zone higher pressure (in terms of KWF) than the lower zone(s)",
+                        "type": "question",
+                        "tooltip": "Assume base case pressure scenarios initially. However, perform same analysis with high and low reservoir pressure combinations to determine risk profile and needed contingencies",
+                        "condition": "{DoZonesHaveSameKillWeight} == 'No'",
+                        "options": [
+                            {
+                                "name": "IsUpperZonePressureHigher",
+                                "label": "No",
+                                "value": "No"
+                            },
+                            {
+                                "name": "IsUpperZonePressureHigher",
+                                "label": "Yes",
+                                "value": "Yes"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "IsPressureDifferenceLessThan3000",
+                        "id": "IsPressureDifferenceLessThan3000",
+                        "label": "With the lower zone being higher pressure, is the pressure difference between the 2 zones less than 3000 psi?",
+                        "type": "question",
+                        "tooltip": "Under the assumption, the fluid in the wellbore needs to be kill weight for the lower zone at all times, more than 2,000 psi over balance to a zone exceeds normal GoM practices. There is a high risk of losses to the upper zone increasing the potential for a well control event. High over balance completions (sub hydrostatic) have been completed at Ursa/Princess, Ram Powell, and Perdido. For a majority of those completions (TLP), the fluid level was allowed to drop to help reduce the overbalance to the zone and control losses during a loss event. That is not possible when completing a stacked (or smart) completion with a higher pressure lower zone. In order to proceed forward with this concept, a detailed integrated risk assessment should be performed that outlines fluid loss mitigation plans and recovery measures.",
+                        "condition": "{IsUpperZonePressureHigher} == 'No'",
+                        "options": [
+                            {
+                                "name": "IsPressureDifferenceLessThan3000",
+                                "label": "No",
+                                "value": "No"
+                            },
+                            {
+                                "name": "IsPressureDifferenceLessThan3000",
+                                "label": "Yes",
+                                "value": "Yes"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "CanFluidLossMeetExpectedOverBalance",
+                        "id": "CanFluidLossMeetExpectedOverBalance",
+                        "label": "Can a Fluid Loss Device for the lower zone meet the expected overbalance with the upper zone's KWF?  If applicable, identify the risks of installing a ball valve on the lower zone (debris exposure, pull plug for intervention access, etc.)",
+                        "tooltip": "<a rel='noreferrer' href='https://eu001-sp.shell.com/:f:/r/sites/SPO000507/Shared%20Documents/Reference%20Documents/Reference%20(31)?csf=1&web=1&e=JZ1pn7' target='_blank'>Reference 31</a> (REFERENCES tab) contains examples of KWF gradient vs BHP scenarios",
+                        "type": "question",
+                        "condition": "{IsUpperZonePressureHigher} == 'Yes'",
+                        "options": [
+                            {
+                                "name": "CanFluidLossMeetExpectedOverBalance",
+                                "label": "No",
+                                "value": "No"
+                            },
+                            {
+                                "name": "CanFluidLossMeetExpectedOverBalance",
+                                "label": "Yes",
+                                "value": "Yes"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "IsPressureDifferenceLessThan3000_result_stop",
+                        "name": "IsPressureDifferenceLessThan3000_result_stop",
+                        "type": "resultbox",
+                        "label": "Stop",
+                        "enableColor": "fail",
+                        "disableColor": "incomplete",
+                        "condition": "{IsPressureDifferenceLessThan3000} == 'No' ||{CanFluidLossMeetExpectedOverBalance} == 'No' "
+                    },
+                    {
+                        "id": "IsPressureDifferenceLessThan3000_result_warning",
+                        "name": "IsPressureDifferenceLessThan3000_result_warning",
+                        "type": "resultbox",
+                        "label": "Caution",
+                        "enableColor": "warning",
+                        "disableColor": "incomplete",
+                        "condition": "{IsPressureDifferenceLessThan3000} == 'Yes'"
+                    },
+                    {
+                        "id": "IsOverBalanceKWF_result_pass",
+                        "name": "IsOverBalanceKWF_result_pass",
+                        "type": "resultbox",
+                        "label": "Pass - continue technical screening",
+                        "enableColor": "pass",
+                        "disableColor": "incomplete",
+                        "condition": "{CanFluidLossMeetExpectedOverBalance} == 'Yes'"
+                    },
+                    {
+                        "name": "IsDistanceBetweenTopandBottomLessThan100ft",
+                        "id": "IsDistanceBetweenTopandBottomLessThan100ft",
+                        "label": "Is the distance between top of lower zone and bottom of upper zone <100 ft?",
+                        "tooltip": "If the distance between top of lower zone and bottom of upper zone >500 ft consider installation of an isolation assembly between zones.",
+                        "type": "question",
+                        "dwfsUrl": "http://wellsoffice.shell.com/wo-dwfs/dwfs/WellFunction/Perforating",
+                        "dwfsTab": "Well Function",
+                        "options": [
+                            {
+                                "name": "IsDistanceBetweenTopandBottomLessThan100ft",
+                                "label": "Yes",
+                                "value": "Yes"
+                            },
+                            {
+                                "name": "IsDistanceBetweenTopandBottomLessThan100ft",
+                                "label": "No",
+                                "value": "No"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "IsDifferenceTopAndBottomLessThan100_result_pass",
+                        "name": "IsDifferenceTopAndBottomLessThan100_result_pass",
+                        "type": "resultbox",
+                        "label": "Pass - continue technical screening",
+                        "enableColor": "pass",
+                        "disableColor": "incomplete",
+                        "condition": "{IsDistanceBetweenTopandBottomLessThan100ft} == 'No'"
+                    },
+                    {
+                        "name": "CanGravelPackBlankVolumeBeReduced",
+                        "id": "CanGravelPackBlankVolumeBeReduced",
+                        "label": "Can the gravel pack blank volume be reduced to install a \"short hook up\"?",
+                        "type": "question",
+                        "condition": "{IsDistanceBetweenTopandBottomLessThan100ft} == 'Yes'",
+                        "theme": "warning",
+                        "options": [
+                            {
+                                "name": "CanGravelPackBlankVolumeBeReduced",
+                                "label": "No",
+                                "value": "No"
+                            },
+                            {
+                                "name": "CanGravelPackBlankVolumeBeReduced",
+                                "label": "Yes",
+                                "value": "Yes"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "CanGravelPackReduceForShortHookup_result_warning",
+                        "name": "CanGravelPackReduceForShortHookup_result_warning",
+                        "type": "resultbox",
+                        "label": "Evaluate technical risks associated with performing a short hookup i.e. less reserve to fill void space Pass - continue technical screening",
+                        "enableColor": "pass",
+                        "disableColor": "incomplete",
+                        "condition": "{CanGravelPackBlankVolumeBeReduced} == 'Yes'"
+                    },
+                    {
+                        "name": "CanPerfIntervalBeShorten",
+                        "id": "CanPerfIntervalBeShorten",
+                        "label": "Can the perf interval be shorten to accommodate completion equipment?",
+                        "type": "question",
+                        "condition": "{CanGravelPackBlankVolumeBeReduced} == 'No'",
+                        "theme": "warning",
+                        "options": [
+                            {
+                                "name": "CanPerfIntervalBeShorten",
+                                "label": "Yes",
+                                "value": "Yes"
+                            },
+                            {
+                                "name": "CanPerfIntervalBeShorten",
+                                "label": "No",
+                                "value": "No"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "CanPerfIntervalBeShorten_result_stop",
+                        "name": "CanPerfIntervalBeShorten_result_stop",
+                        "type": "resultbox",
+                        "label": "Stop",
+                        "enableColor": "fail",
+                        "disableColor": "incomplete",
+                        "condition": "{CanPerfIntervalBeShorten} == 'No'"
+                    },
+                    {
+                        "id": "CanPerfIntervalBeShorten_result_warning",
+                        "name": "CanPerfIntervalBeShorten_result_warning",
+                        "type": "resultbox",
+                        "label": "Update economics to include reduce perf interval and evaluate accordingly Pass - continue technical screening",
+                        "enableColor": "pass",
+                        "disableColor": "incomplete",
+                        "condition": "{CanPerfIntervalBeShorten} == 'Yes'"
+                    },
+                    {
+                        "name": "StackTechnicallyFeasible",
+                        "id": "StackTechnicallyFeasible",
+                        "label": "Is a stacked selective well technically feasible?",
+                        "type": "question",
+                        "options": [
+                            {
+                                "name": "StackTechnicallyFeasible",
+                                "label": "Yes",
+                                "value": "Yes"
+                            },
+                            {
+                                "name": "StackTechnicallyFeasible",
+                                "label": "No",
+                                "value": "No"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "StackTechnicallyFeasible_result_stop",
+                        "name": "StackTechnicallyFeasible_result_stop",
+                        "type": "resultbox",
+                        "label": "Stop",
+                        "enableColor": "fail",
+                        "disableColor": "incomplete",
+                        "condition": "{StackTechnicallyFeasible} == 'No'"
+                    },
+                    {
+                        "id": "StackTechnicallyFeasible_result_warning",
+                        "name": "StackTechnicallyFeasible_result_warning",
+                        "type": "resultbox",
+                        "label": "Pass",
+                        "enableColor": "pass",
+                        "disableColor": "incomplete",
+                        "condition": "{StackTechnicallyFeasible} == 'Yes'"
+                    },
+                    {
+                        "id": "lower_completion_installtion_screening-comment",
+                        "name": "lower_completion_installtion_screening-comment",
+                        "type": "commentbox"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "label": "Value Economic Screening",
+        "name": "valueEconomicScreening",
+        "id": "valueEconomicScreening",
+        "innerTabs": [
+            {
+                "id": "cost_screening",
+                "name": "cost_screening",
+                "type": "tab",
+                "label": "Cost Screening",
+                "content": [
+                    {
+                        "id": "IncrementalCostForStackedWell",
+                        "name": "IncrementalCostForStackedWell",
+                        "label": "Determine incremental cost for a stacked well over a single well (stacked commingled and stacked selective wells have essentially the same incremental cost).",
+                        "type": "statement"
+                    },
+                    {
+                        "name": "CanSelectiveWellReduceWellCount",
+                        "id": "CanSelectiveWellReduceWellCount",
+                        "label": "Can a Stacked Selective Well reduce well count?",
+                        "tooltip": "Consider the following: - Reference CET Multi-Zone Cost Screening Tool <a rel='noreferrer' href='https://eu001-sp.shell.com/:f:/r/sites/SPO000507/Shared%20Documents/Reference%20Documents/Reference%20(08)?csf=1&web=1&e=klH4du' target='_blank'>(#8 in REFERENCES tab)</a> Carefully consider development impact of extra or removed wells",
+                        "type": "question",
+                        "options": [
+                            {
+                                "name": "CanSelectiveWellReduceWellCount",
+                                "label": "No",
+                                "value": "No"
+                            },
+                            {
+                                "name": "CanSelectiveWellReduceWellCount",
+                                "label": "Yes",
+                                "value": "Yes"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "CanSmartWellReduceWellCount_result_stop",
+                        "name": "smartwell_reduce_count_result_stop",
+                        "type": "resultbox",
+                        "label": "Stop",
+                        "enableColor": "fail",
+                        "disableColor": "incomplete",
+                        "condition": "{CanSelectiveWellReduceWellCount} == 'No'"
+                    },
+                    {
+                        "id": "CanSmartWellReduceWellCount_result_pass",
+                        "name": "CanSmartWellReduceWellCount_result_pass",
+                        "type": "resultbox",
+                        "label": "-Include Savings in NPV Calcs $75 mln SS $50 mln TLP",
+                        "enableColor": "pass",
+                        "disableColor": "incomplete",
+                        "condition": "{CanSelectiveWellReduceWellCount} == 'Yes' "
+                    },
+                    {
+                        "id": "cost_screening-comment",
+                        "name": "cost_screening-comment",
+                        "type": "commentbox"
+                    }
+                ]
+            },
+            {
+                "id": "zonal_EUR_differences_screening",
+                "name": "zonal_EUR_differences_screening",
+                "type": "tab",
+                "label": "Zonal EUR Differences Screening",
+                "content": [
+                    {
+                        "name": "IsEUREachZoneSignificantlyDifferent",
+                        "id": "IsEUREachZoneSignificantlyDifferent",
+                        "label": "Are the EUR's of each  zone significantly different",
+                        "type": "question",
+                        "options": [
+                            {
+                                "name": "IsEUREachZoneSignificantlyDifferent",
+                                "label": "No",
+                                "value": "No"
+                            },
+                            {
+                                "name": "IsEUREachZoneSignificantlyDifferent",
+                                "label": "Yes",
+                                "value": "Yes"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "IsEURZoneSignificantlyDifferent_result_pass",
+                        "name": "IsEURZoneSignificantlyDifferent_result_pass",
+                        "type": "resultbox",
+                        "label": "Pass - continue value/economic screening",
+                        "enableColor": "pass",
+                        "disableColor": "incomplete",
+                        "condition": "{IsEUREachZoneSignificantlyDifferent} == 'No'"
+                    },
+                    {
+                        "name": "WhichZoneHasHigherEUR",
+                        "id": "WhichZoneHasHigherEUR",
+                        "label": "Which zone has significantly higher EUR?",
+                        "type": "question",
+                        "condition": "{IsEUREachZoneSignificantlyDifferent} == 'Yes'",
+                        "options": [
+                            {
+                                "name": "WhichZoneHasHigherEUR",
+                                "label": "Lower zone",
+                                "value": "lower_zone"
+                            },
+                            {
+                                "name": "WhichZoneHasHigherEUR",
+                                "label": "Upper zone",
+                                "value": "upper_zone"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "HigherEURZone_result_warning",
+                        "name": "HigherEURZone_result_warning",
+                        "type": "resultbox",
+                        "label": "A plug could be installed to isolate the lower zone. Note that in most cases an intervention on a subsea well out weighs the incremental cost for a smart well.Continue value/economic screening for applicable smart well benefits.Quantify Smart Well benefits via a decision tree and risked cost of an intervention vs. a smart well installationContinue to Production & Reservoir Modelling",
+                        "enableColor": "warning",
+                        "disableColor": "incomplete",
+                        "condition": "{WhichZoneHasHigherEUR} == 'lower_zone'"
+                    },
+                    {
+                        "id": "HigherEURZone_result_pass",
+                        "name": "HigherEURZone_result_pass",
+                        "type": "resultbox",
+                        "label": "A selective well could be installed and a S/L intervention executed to close the SSD. However, the ability to successfully close the SSD will be less likely than opening an SSD for the first time. Note that in most cases an intervention on a subsea well out weighs the incremental cost for a smart well.Continue value/economic screening for applicable smart well benefits.Quantify Smart Well benefits via a decision tree and risked cost of an intervention vs. a smart well installation Continue to Production & Reservoir Modelling",
+                        "enableColor": "pass",
+                        "disableColor": "incomplete",
+                        "condition": "{WhichZoneHasHigherEUR} == 'upper_zone'"
+                    },
+                    {
+                        "id": "zonal_EUR_differences_screening-comment",
+                        "name": "zonal_EUR_differences_screening-comment",
+                        "type": "commentbox"
+                    }
+                ]
+            },
+            {
+                "id": "accelerated_production_or_EOFL_screening",
+                "name": "accelerated_production_or_EOFL_screening",
+                "type": "tab",
+                "label": "Accelerated Production or EOFL Screening",
+                "content": [
+                    {
+                        "name": "IsThereProductionAccelerationBenefit",
+                        "id": "IsThereProductionAccelerationBenefit",
+                        "label": "Is there a production acceleration benefit or end of field life benefit of installing a second zone (or third zone) with zonal control?",
+                        "type": "question",
+                        "tooltip": "Some examples include: -Accelerating production from an uphole zone may increase EUR from the zone if current FDP production forecasts exceed EOFL estimates. -Accelerating production of a waterflooded zone via a selective well could increase EUR while pressure support is greatest if the alternative production plan is to produce the uphole zone from a current injector wellbore in the future.",
+                        "options": [
+                            {
+                                "name": "IsThereProductionAccelerationBenefit",
+                                "label": "Yes",
+                                "value": "Yes"
+                            },
+                            {
+                                "name": "IsThereProductionAccelerationBenefit",
+                                "label": "No",
+                                "value": "No"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "IsProductionAccelerationBenefit_result_pass",
+                        "name": "IsProductionAccelerationBenefit_result_pass",
+                        "type": "resultbox",
+                        "label": "Pass - Continue to screen for additional applicable Smart Well benefits Quantify value of production acceleration via economic modelling",
+                        "enableColor": "pass",
+                        "disableColor": "incomplete",
+                        "condition": "{IsThereProductionAccelerationBenefit} == 'Yes'"
+                    },
+                    {
+                        "id": "IsProductionAccelerationBenefit_result_warning",
+                        "name": "IsProductionAccelerationBenefit_result_warning",
+                        "type": "resultbox",
+                        "label": "Continue value/economic screening for applicable smart well benefits.",
+                        "enableColor": "warning",
+                        "disableColor": "incomplete",
+                        "condition": "{IsThereProductionAccelerationBenefit} == 'No'"
+                    },
+                    {
+                        "id": "accelerated_production_or_EOFL_screening-comment",
+                        "name": "accelerated_production_or_EOFL_screening-comment",
+                        "type": "commentbox"
+                    }
+                ]
+            },
+            {
+                "id": "waterflood_or_water_production_screening",
+                "name": "waterflood_or_water_production_screening",
+                "type": "tab",
+                "label": "Waterflood or Water Production Screening",
+                "content": [
+                    {
+                        "name": "IsZoneWaterFloodedOrSignificantWaterProduction",
+                        "id": "IsZoneWaterFloodedOrSignificantWaterProduction",
+                        "label": "Is one of the zones water flooded or is one zone expected to have significant water production before the other?",
+                        "tooltip": "H2S/metallurgy evaluation should be done if water production is expected in any zone. Consider impacts to any complex metallurgy combinations, if applicable during acid (pH 1-2) or caustic (pH 11-13) stimulations.",
+                        "type": "question",
+                        "dwfsUrl": "http://wellsoffice.shell.com/wo-dwfs/dwfs/H2SCategory/H2S",
+                        "dwfsTab": "H2S & CO2",
+                        "options": [
+                            {
+                                "name": "IsZoneWaterFloodedOrSignificantWaterProduction",
+                                "label": "Yes",
+                                "value": "Yes"
+                            },
+                            {
+                                "name": "IsZoneWaterFloodedOrSignificantWaterProduction",
+                                "label": "No",
+                                "value": "No"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "IsZoneFlodded_result_pass",
+                        "name": "IsZoneFlodded_result_pass",
+                        "type": "resultbox",
+                        "label": "Pass - Continue to screen for additional applicable Smart Well benefits Quantify value of production acceleration via economic modelling",
+                        "enableColor": "pass",
+                        "disableColor": "incomplete",
+                        "condition": "{IsZoneWaterFloodedOrSignificantWaterProduction} == 'Yes'"
+                    },
+                    {
+                        "id": "IsZoneFlodded_result_warning",
+                        "name": "IsZoneFlodded_result_warning",
+                        "type": "resultbox",
+                        "label": "Continue value/economic screening for applicable smart well benefits.",
+                        "enableColor": "warning",
+                        "disableColor": "incomplete",
+                        "condition": "{IsZoneWaterFloodedOrSignificantWaterProduction} == 'No'"
+                    },
+                    {
+                        "id": "waterflood_or_water_production_screening-comment",
+                        "name": "waterflood_or_water_production_screening-comment",
+                        "type": "commentbox"
+                    }
+                ]
+            },
+            {
+                "id": "productionReservoirModelling",
+                "name": "productionReservoirModelling",
+                "type": "tab",
+                "label": "Production & Reservoir Modelling",
+                "content": [
+                    {
+                        "id": "determineCostOfPotentialConcepts",
+                        "name": "determineCostOfPotentialConcepts",
+                        "label": "Determine costs of potential concepts (single zone, conventional commingle well)",
+                        "type": "statement"
+                    },
+                    {
+                        "id": "generateProductionForcasts",
+                        "name": "generateProductionForcasts",
+                        "label": "Generate production forecasts of single zone and conventional stacked commingle well",
+                        "type": "statement"
+                    },
+                    {
+                        "id": "constructDecisionTreeOfConcept",
+                        "name": "constructDecisionTreeOfConcept",
+                        "label": "Construct decision tree of concept options with risked execution, VOI events, etc...",
+                        "tooltip": "-Reference the CET Smart Well Screening Tool for GAP modelling structure and smart well modelling best practices <a rel='noreferrer' href='https://eu001-sp.shell.com/:f:/r/sites/SPO000507/Shared%20Documents/Reference%20Documents/Reference%20(09)?csf=1&web=1&e=FfhNIy' target='_blank'>(#9 in REFERENCES tab)</a>",
+                        "type": "statement"
+                    },
+                    {
+                        "id": "generateFinalVirNpv",
+                        "name": "generateFinalVirNpv",
+                        "label": "Generate final VIR, NPV, etc.. of conceptual scenarios",
+                        "type": "statement"
+                    },
+                    {
+                        "id": "IsThereSignificantBenefitOfSelectiveWell",
+                        "name": "IsThereSignificantBenefitOfSelectiveWell",
+                        "label": "Is there a significant cost, rate, volume, or risk mitigation benefit of a commingle well?",
+                        "type": "question",
+                        "options": [
+                            {
+                                "name": "IsThereSignificantBenefitOfSelectiveWell",
+                                "label": "Yes",
+                                "value": "Yes"
+                            },
+                            {
+                                "name": "IsThereSignificantBenefitOfSelectiveWell",
+                                "label": "No",
+                                "value": "No"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "IsThereSignificantBenefitOfCommingleWell_result_left",
+                        "name": "IsThereSignificantBenefitOfCommingleWell_result_left",
+                        "type": "resultbox",
+                        "label": "Proceed forward with commingle Well Concept Selection recommendation.",
+                        "enableColor": "pass",
+                        "disableColor": "incomplete",
+                        "condition": "{IsThereSignificantBenefitOfSelectiveWell} == 'Yes'"
+                    },
+                    {
+                        "id": "IsThereSignificantBenefitOfCommingleWell_result_right",
+                        "name": "IsThereSignificantBenefitOfCommingleWell_result_right",
+                        "type": "resultbox",
+                        "label": "Stop",
+                        "enableColor": "fail",
+                        "disableColor": "incomplete",
+                        "condition": "{IsThereSignificantBenefitOfSelectiveWell} == 'No'"
+                    },
+                    {
+                        "id": "productionReservoirModelling-comment",
+                        "name": "productionReservoirModelling-comment",
+                        "type": "commentbox"
+                    }
+                ]
+            }
+        ]
+    }
+]
