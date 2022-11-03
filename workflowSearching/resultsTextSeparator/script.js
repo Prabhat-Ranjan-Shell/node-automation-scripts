@@ -15,7 +15,7 @@ function resultFilter(data) {
     }, []);
 }
 
-fs.writeFile('result.json', JSON.stringify(resultFilter(data)), (err, data) => {
+fs.writeFile('result.json', JSON.stringify(resultFilter(data)), (err) => {
     if (err) {
         throw Error('Write failed!');
     }
