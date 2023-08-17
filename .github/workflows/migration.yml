@@ -1,0 +1,114 @@
+name: Reusable Terraform Workspace Migration
+
+on:
+  workflow_call:
+    inputs:
+      tfe_workspace_id:
+        description: 'TFE Workspace ID'
+        type: string
+        required: true
+      tfc_workspace_id:
+        description: 'TFC Workspace ID'
+        type: string
+        required: true
+    secrets:
+      tfe_token: ${{ secrets.tfe_token }}
+      tfc_token: ${{ secrets.tfc_token }}
+
+permissions:
+  contents: write
+
+jobs:
+  terraform-StateMigration:
+    runs-on: CPE-Runners
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Get State By ID
+        shell: bash
+        run:  |
+          CURRENT_STATE_VERSION_URL=$(curl -s \
+            --header "Authorization: Bearer ${{ secrets.tfe_token }}" \
+            --header "Content-Type: application/vnd.api+json" \
+            "https://tfe.ops.aws.shell.io/api/v2/workspaces/${{ inputs.tfe_workspace_id }}/current-state-version" \
+            | jq -r '.data | .attributes | ."hosted-state-download-url"')
+          curl -s -o state.tfstate $CURRENT_STATE_VERSION_URL
+          TERRAFORM_VERSION=$(cat state.tfstate | jq -r '.terraform_version')
+          echo "Terraform Version is ${TERRAFORM_VERSION}"
+
+      - name: Create payload
+        shell: bash
+        run: |
+          serial=$(cat state.tfstate | jq -r '.serial')
+          lineage=$(cat state.tfstate | jq -r '.lineage')
+          md5=$(md5sum state.tfstate | awk '{print $1}')
+          state=$(base64 state.tfstate)
+          echo "{
+            \"data\": {
+              \"type\": \"state-versions\",
+              \"attributes\": {
+                \"serial\": ${serial},
+                \"lineage\": \"${lineage}\",
+                \"md5\": \"${md5}\",
+                \"state\": \"${state}\"
+              }
+            }
+          }" | tee payload.json
+
+      - name: Lock TFC workspace
+        shell: bash
+        run: |
+          echo '{ "reason": "importing state from tfe" }' | jq -M | tee lock.json
+          HTTP_POST=$(curl -s \
+            --header "Authorization: Bearer ${{ secrets.tfc_token }}" \
+            --header "Content-Type: application/vnd.api+json" \
+            --request POST \
+            --data @lock.json \
+            "https://app.terraform.io/api/v2/workspaces/${{ inputs.tfc_workspace_id }}/actions/lock")
+          echo $HTTP_POST
+          echo $HTTP_POST | jq -r '.errors | length' | egrep -wq '0'
+
+      - name: Push state to TFC
+        shell: bash
+        run:  |
+          HTTP_POST=$(curl -s \
+            --header "Authorization: Bearer ${{ secrets.tfc_token }}" \
+            --header "Content-Type: application/vnd.api+json" \
+            --request POST \
+            --data @payload.json \
+            "https://app.terraform.io/api/v2/workspaces/${{ inputs.tfc_workspace_id }}/state-versions")
+          echo $HTTP_POST
+          echo $HTTP_POST | jq -r '.errors | length' | egrep -wq '0'
+
+      - name: Unlock TFC workspace
+        shell: bash
+        run: |
+          echo '{ "reason": "importing state from tfe" }' | jq -M | tee lock.json
+          HTTP_POST=$(curl -s \
+            --header "Authorization: Bearer ${{ secrets.tfc_token }}" \
+            --header "Content-Type: application/vnd.api+json" \
+            --request POST \
+            --data @lock.json \
+            "https://app.terraform.io/api/v2/workspaces/${{ inputs.tfc_workspace_id }}/actions/unlock")
+          echo $HTTP_POST
+          echo $HTTP_POST | jq -r '.errors | length' | egrep -wq '0'
+
+      - name: Lock TFE workspace
+        shell: bash
+        run: |
+          echo '{ "reason": "tfe state has been migrated" }' | jq -M | tee lock.json
+          HTTP_POST=$(curl -s \
+            --header "Authorization: Bearer ${{ secrets.tfe_token }}" \
+            --header "Content-Type: application/vnd.api+json" \
+            --request POST \
+            --data @lock.json \
+            "https://tfe.ops.aws.shell.io/api/v2/workspaces/${{ inputs.tfe_workspace_id }}/actions/lock")
+          echo $HTTP_POST
+          echo $HTTP_POST | jq -r '.errors | length' | egrep -wq '0'
+
+      - name: Post Migration Activities and GA Summary 
+        shell: bash
+        run: |
+          cat README-PostMigrationSummary.md
+          cat README-PostMigrationSummary.md >> $GITHUB_STEP_SUMMARY
