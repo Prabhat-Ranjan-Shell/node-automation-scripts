@@ -1,0 +1,166 @@
+* {margin:0;padding:0;border:0 none; position:relative;}
+*,*:before,*:after {
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+body {
+  background: #f0f0f0;
+  width: 100%;
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+	color: #333;
+  font-weight: 400;
+}
+
+/* The grid & placement*/
+.card {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	grid-template-rows: auto;
+	grid-template-areas: 
+		". . . ."
+		"uno uno uno uno"
+		"dos dos dos dos"
+		"tre tre tre tre"
+		"cua cua cua cua"
+		"cin cin cin cin"
+		"sei sei sei sei";
+}
+/* placing the items  */
+input:checked + label {
+	grid-area: uno;
+}
+input:checked ~ input:checked + label {
+	grid-area: dos;
+}
+input:checked ~ input:checked ~ input:checked + label {
+	grid-area: tre;
+}
+input:checked ~ input:checked ~ input:checked ~ input:checked + label {
+	grid-area: cua;
+}
+input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked + label {
+	grid-area: cin;
+}
+input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked ~ input:checked + label {
+	grid-area: sei;
+}
+
+/* Let´s do it nice & funny */
+
+.card {
+	background: #fff;
+	max-width: 600px;
+	width: 90%;
+	margin: 4rem auto 0;
+	padding: 3rem 0;
+	box-shadow: 0 0 3px rgba(0,0,0,.3);
+	border: 1px solid  rgba(0,0,0,.45);
+}
+.card::before,
+.card::after {
+	background: -rgba(0,0,0,.05);
+	position: absolute;
+	left: 0;
+	right: 0;
+	line-height: 3rem;
+	font-size: 1.5rem;
+	text-align: center;
+	letter-spacing: 2px;
+}
+.card::before {
+	content: 'You must do it in order';
+	top: 0;
+}
+.card::after {
+	content:'Undo it in any order you want';
+	bottom: 0;
+}
+label {
+	cursor: pointer;
+	font-variant: small-caps;
+	padding-left: .5rem;
+	overflow: hidden;
+	font-size: 1.5rem;
+	line-height: 2;
+	transform-origin: 0 50%;
+}
+input:not(checked) + label {
+	background: #fff;
+	margin: 5px;
+	border: 3px double #333;
+	animation: grow .75s;
+}
+input:checked + label {
+	background: #68efad;
+	text-align: left;
+	padding-left: 2.5rem;
+	animation: show .75s;
+}
+label:hover {
+	background: #68efad;
+}
+input:checked + label:hover {
+	background: #fff;
+}
+.hide {
+	display: none;
+}
+h1 {
+	background: #333;
+	color: #fff;
+	box-shadow: 0 0 3px rgba(0,0,0,.2);
+	border: 1px solid #000;
+	text-align: center;
+	line-height: 2;
+	font-weight: 100;
+	letter-spacing: 1vw;
+}
+label::before {
+	content: 'x';
+	background: #000;
+	width: 1rem;
+	height: 1rem;
+	line-height: 1rem;
+	font-size: .75rem;
+	text-align: center;
+	color: #fff;
+	position: absolute;
+	right: 10px;
+	top: 35%;
+	border-radius: 20%;
+	vertical-aligh: top;
+}
+:checked + label::before {
+	border-color: green;
+	left: 13px;
+}
+:checked + label::after {
+	content:'done';
+	font-size: 90%;
+	position: absolute;
+	right: 1rem;
+}
+/* doing in order */
+input:not(:checked) ~ :not(:checked) + label {
+	pointer-events: none;
+}
+/* hide & show the last items */
+input:nth-of-type(n+5):not(:checked) + label {
+	display: none;
+}
+input:checked ~ input:nth-of-type(5) + label {
+	display: block;
+}
+input:checked ~ input:checked ~ input:nth-of-type(6) + label {
+	display: block;
+}
+
+@keyframes show {
+	0% {transform: scaleX(0);}
+	100% {transform: scaleX(1);}
+}
+@keyframes grow {
+	0% {transform: scaleX(0);}
+	100% {transform: scaleX(1);}
+}

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draggable</title>
+    <style>
+        :root {
+            --bg: #1e90ff;
+            --white: #ffffff;
+        }
+
+        body div {
+            display: flex;
+            justify-content: space-between;
+            height: 100vh;
+        }
+
+        body>div>div {
+            width: 200px;
+            height: 200px;
+            display: flex;
+            background-color: var(--bg);
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        function allowDrop(e) {
+            e.preventDefault();
+        }
+
+        function drag(e) {
+            e.dataTransfer.clearData();
+            e.dataTransfer.setData("text/plain", e.target.id);
+        }
+
+        function drop(e) {
+            e.preventDefault();
+            const data = e.dataTransfer.getData("text/plain");
+            const source = document.getElementById(data);
+            e.target.appendChild(source);
+        }
+    </script>
+</head>
+
+<body>
+    <div ondrop="drop(event)" ondragover="allowDrop(event)">
+        <div id="1" style="--bg: #ff6;" draggable="true" ondragstart="drag(event)"></div>
+        <div id="2" style="--bg: rgb(14, 135, 144);" draggable="true" ondragstart="drag(event)"></div>
+        <div id="3" style="--bg: rgb(9, 96, 49);" draggable="true" ondragstart="drag(event)"></div>
+        <div id="4" style="--bg: rgb(107, 11, 14);" draggable="true" ondragstart="drag(event)"></div>
+        <div id="5" draggable="true" ondragstart="drag(event)"></div>
+    </div>
+</body>
+
+</html>
