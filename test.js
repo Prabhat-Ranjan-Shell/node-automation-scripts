@@ -503,6 +503,115 @@ const {
 } = userList;
 
 // console.log("Data....", userListData);
-console.log(userListData.slice(5, 10));
+// console.log(userListData.slice(5, 10));
+
+
+function useCustomHook(initialValue) {
+    let value = {
+        v: initialValue,
+        // value = initialValue;
+        setValue: (val) => {
+            if (typeof val === 'function') {
+                this.v = val(value);
+            }
+            this.v = val;
+        }
+    }
+
+    return [
+        value.v,
+        value.setValue
+    ]
+}
+
+const [num, setNum] = useCustomHook(9);
+// setNum(98);
+
+// console.log("------", num, setNum);
+
+function useState(initialValue) {
+    let obj = {};
+
+    return [obj['value'], function (i) {
+        if (obj['value']) {
+            console.log('Not Calculating');
+            return obj['value'];
+        }
+        obj['value'] = i;
+        console.log('Calculating!');
+        return i;
+    }]
+}
+
+// const [a, b] = useState(8)
+// console.log("----", a, b(89));
+
+// function createCounter() {
+//     let count = 0;
+
+//     function increment(v) {
+//       count += v;
+//       return count;
+//     }
+
+//     return {
+//       a: count,
+//       b: increment
+//     };
+//   }
+
+//   const { a, b } = createCounter();
+
+//   console.log(a); // Output: 0
+//   console.log(b(7)); // Output: 1
+//   console.log(a); // Output: 1
+
+// implementatioin of useState
+
+function createCounter(x) {
+    let count = x;
+
+    function increment(v) {
+        if (typeof v === 'function') {
+            count += v(count);
+        } else {
+            count += v;
+        }
+        return count;
+    }
+
+    return [count, increment];
+}
+
+const [a, b] = createCounter(8);
+
+console.log(a); // Output: 8
+console.log(b((prev)=> prev-5 )); // Output: 11
+console.log(a); // Output: 8
+
+//  
+const vm = require('vm');
+
+const context = {
+  x: 10,
+  y: 20
+};
+
+const code = `
+  const result = x + y;
+  result;
+`;
+
+const script = new vm.Script(code);
+
+const result = script.runInNewContext(context);
+
+console.log(result); // Output: 30
+
+
+
+
+
+
 
 

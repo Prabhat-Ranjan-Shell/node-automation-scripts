@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Name - Portfolio</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <img src="logo.png" alt="Logo" class="header-logo"> <!-- Added logo here -->
+            <h1 class="header-title">Your Name</h1>
+            <nav class="header-nav">
+                <ul class="header-nav-list">
+                    <li class="header-nav-item"><a href="#about" class="header-nav-link">About Me</a></li>
+                    <li class="header-nav-item"><a href="#portfolio" class="header-nav-link">Portfolio</a></li>
+                    <li class="header-nav-item"><a href="#contact" class="header-nav-link">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section id="about" class="section">
+        <h2 class="section-title">About Me</h2>
+        <p class="section-content">Write a brief introduction about yourself here.</p>
+    </section>
+
+    <section id="portfolio" class="section">
+        <h2 class="section-title">Portfolio</h2>
+    </section>
+
+    <section id="contact" class="section">
+        <h2 class="section-title">Contact</h2>
+        <p class="section-content">Email: youremail@example.com</p>
+        <!-- Add additional contact information as needed -->
+    </section>
+
+    <footer class="footer">
+        <p class="footer-text">&copy; 2023 Your Name</p>
+    </footer>
+
+    <script>
+        if('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+        }
+    </script>
+</body>
+
+</html>

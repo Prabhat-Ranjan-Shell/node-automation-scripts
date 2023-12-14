@@ -168,4 +168,4 @@ function stringManipulation(str) {
 }
 
 
-console.log("--", stringManipulation("आयकर विभाग\nINCOME TAX DEPARTMENT\nD MANIKANDAN\nDURAISAMY\n16/07/1986\nPermanent Account Number\nBNZPM2501F\nD. maniikanmalgar\nSignature\nभारत सरकार\nGOVT. OF INDIA\n04082011\n"));
+// console.log("--", stringManipulation("आयकर विभाग\nINCOME TAX DEPARTMENT\nD MANIKANDAN\nDURAISAMY\n16/07/1986\nPermanent Account Number\nBNZPM2501F\nD. maniikanmalgar\nSignature\nभारत सरकार\nGOVT. OF INDIA\n04082011\n"));
